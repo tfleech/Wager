@@ -1,0 +1,34 @@
+{% extends 'User_Profiles/HomePage_Base.html' %}
+{% load static %}
+
+<link href="{% static 'User_Profiles/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+<link href="{% static 'User_Profiles/starter-template.css' %}" rel="stylesheet">
+
+{% block login %}
+<li><a href="/Profile/">Your Profile</a></li>
+<li><a href="/NewBet/">Make a new Bet</a></li>
+<li><a href="/SetLoggedOut/">Log Out</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+	<div class="starter-template">
+	  <h1>Active Bets</h1>
+	  <div class="list-group">
+	  	{% if latest_bet_list %}
+		    {% for bet in latest_bet_list %}
+		        <a href="#", class="list-group-item">
+		          <p>{{ bet.Terms }} -- Made BY: {{ bet.user1.User_Name }} Against: {{  bet.user2.User_Name }}</p>
+		          <p>Loser {{ bet.Stakes }}</p>
+		          <p align="right">{{ bet.Due_date }}</p>
+		        </a>
+		    {% endfor %}
+	    {% endif %}
+	  </div>
+	</div>
+
+</div><!-- /.container -->
+{% endblock %}

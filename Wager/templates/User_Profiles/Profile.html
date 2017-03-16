@@ -1,0 +1,26 @@
+{% if user %}
+	<h1>{{ user.User_Name }}</h1>
+	<br>
+	<h3>Your Bets</h3>
+	{% for bet in for_bets %}
+		{% if bet.Status == 1 %}
+			<li><p style="color:red">{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p></li>
+		{% elif bet.Status == 2 %}
+			<li><p>{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p></li>
+		{% endif %}
+	{% endfor %}
+	<br>
+	<h3>Bets against you</h3>
+	{% for bet in against_bets %}
+		{% if bet.Status == 1 %}
+			<li><p style="color:red">{{ bet.Terms }} -- Challenged By: {{ bet.user1.User_Name }}  </p><a href="/AcceptBet/{{ bet.pk }}">Accept</a></li>
+		{% elif bet.Status == 2 %}
+			<li><p>{{ bet.Terms }} -- Challenged By: {{ bet.user1.User_Name }}</p><a href="/User2Wins/{{ bet.pk }}">I Won  </a><a href="/User1Wins/{{ bet.pk }}">I Lost</a></li>
+		{% endif %}
+	{% endfor %}
+
+	<a href="/">Home</a>
+
+{% else %}
+	<p>Not a valid User</p>
+{% endif %}

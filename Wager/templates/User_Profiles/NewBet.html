@@ -1,0 +1,28 @@
+<form action="/CreateNewBet/" method="post">
+	{% csrf_token %}
+	<label for="Public">Public/Private?</label>
+	<input type="text" name="Public"><br>
+	<!--<input id="Public" type="radio" name="Public" value="y" style="visibility: visible;"><br>-->
+
+	<label for="Opponent">Choose an Opponent</label>
+	<select id="Opponent" name="Opponent">
+	{% for entry in users %}
+		<option value="{{ entry.User_Name }}">{{ entry.User_Name }}</option>
+	{% endfor %}
+	</select>
+	<!--<select id="Public">
+		<option value="Public">Public</option>
+		<option value="Private">Private</option>
+	</select>-->
+
+	<label for="Terms">Terms: </label>
+	<input id="Terms" type="text" name="Terms"><br>
+
+	<label for="Stakes">Stakes: </label>
+	<input id="Stakes" type="text" name="Stakes">
+
+	<label for="Time">Days to complete: </label>
+	<input id="Time" type="number" name="Time" min="1">
+
+	<input type="submit" value="submit" />
+</form>
