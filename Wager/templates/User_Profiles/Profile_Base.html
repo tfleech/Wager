@@ -67,19 +67,24 @@
             {% for bet in for_bets %}
               {% if bet.Status == 1 %}
                 <a href="#", class="list-group-item">
-                  <p style="color:red">{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p>
+                  <p>{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}  <span style="color:red">(Waiting for Accept)</span></p>
                   <p>Loser {{ bet.Stakes }}</p>
                   <p align="right">{{ bet.Due_date }}</p>
                 </a>
               {% elif bet.Status == 2 %}
                 <a href="#", class="list-group-item">
-                  <p>{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p>
+                  <p>{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}  <span style="color:red">(Waiting for Result)</span></p>
                   <p>Loser {{ bet.Stakes }}</p>
                   <p align="right">{{ bet.Due_date }}</p>
                 </a>
               {% elif bet.Status == 4 %}
                 <a href="#", class="list-group-item">
-                  <p style="color:red">{{ bet.Terms }} -- Challenged By: {{ bet.user1.User_Name }}  </p><button class="btn btn-default" onclick="location.href='/AcceptResult/{{ bet.pk }}';">Accept</button>
+                  <p>{{ bet.Terms }} -- Against: {{ bet.user2.User_Name }}  </p><button class="btn btn-default" onclick="location.href='/AcceptResult/{{ bet.pk }}';">Accept</button>
+                  {% if bet.Winner == user.pk %}
+                    <p style="color:green">{{ bet.user2.User_Name }} says you won!</p>
+                  {% elif bet.Winner == bet.user2.pk %}
+                    <p style="color:red">{{ bet.user2.User_Name }} says you lost.</p>
+                  {% endif %}
                   <p>Loser {{ bet.Stakes }}</p>
                   <p align="right">{{ bet.Due_date }}</p>
                 </a>
@@ -90,7 +95,7 @@
             {% for bet in against_bets %}
               {% if bet.Status == 1 %}
                 <a href="#", class="list-group-item">
-                  <p style="color:red">{{ bet.Terms }} -- Challenged By: {{ bet.user1.User_Name }}  </p><button class="btn btn-default" onclick="location.href='/AcceptBet/{{ bet.pk }}';">Accept</button>
+                  <p>{{ bet.Terms }} -- Challenged By: {{ bet.user1.User_Name }}  </p><button class="btn btn-default" onclick="location.href='/AcceptBet/{{ bet.pk }}';">Accept</button>
                   <p>Loser {{ bet.Stakes }}</p>
                   <p align="right">{{ bet.Due_date }}</p>
                 </a>
@@ -107,7 +112,7 @@
                 </a>
               {% elif bet.Status == 4 %}
                 <a href="#", class="list-group-item">
-                  <p style="color:red">{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p>
+                  <p>{{ bet.Terms }} -- Challenged By: {{  bet.user1.User_Name }}  <span style="color:red">(Waiting for Accept)</span></p>
                   <p>Loser {{ bet.Stakes }}</p>
                   <p align="right">{{ bet.Due_date }}</p>
                 </a>
