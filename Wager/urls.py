@@ -13,4 +13,5 @@ urlpatterns = [
 	url(r'^AcceptBet/(?P<bet_id>[0-9]+)/$', views.AcceptBet, name='AcceptBet'),
 	url(r'^User2Wins/(?P<bet_id>[0-9]+)/$', views.User2Wins, name='User2Wins'),
 	url(r'^User1Wins/(?P<bet_id>[0-9]+)/$', views.User1Wins, name='User1Wins'),
+	url(r'^AcceptResult/(?P<bet_id>[0-9]+)/$', views.AcceptResult, name="AcceptResult"),
 ]

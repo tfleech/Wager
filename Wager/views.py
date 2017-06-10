@@ -70,7 +70,7 @@ def Profile(request):
 	friends = User.objects.all().filter(pk__in=r)
 	for_bets = Bet.objects.filter(user1__pk=u.pk)
 	against_bets = Bet.objects.filter(user2__pk=u.pk)
-	context = {'user':u, 'for_bets':for_bets, 'against_bets':against_bets}
+	context = {'user':u, 'for_bets':for_bets, 'against_bets':against_bets, 'all_bets':list(set(against_bets)|set(for_bets))}
 	return render(request, 'User_Profiles/Profile_Base.html', context)
 
 def AcceptBet(request, bet_id):
@@ -82,31 +82,39 @@ def AcceptBet(request, bet_id):
 
 def User2Wins(request, bet_id):
 	b = get_object_or_404(Bet, pk=bet_id)
-	winner = b.user2.pk
+	b.Winner = b.user2.pk
 	b.Status = 4
 	b.save()
-	b.user2.Wins += 1
-	b.user2.WinPercent = b.user2.Wins*100/(b.user2.Wins+b.user2.Losses)
-	b.user2.LossPercent = b.user2.Losses*100/(b.user2.Wins+b.user2.Losses)
-	b.user2.save()
-	b.user1.Losses += 1
-	b.user1.WinPercent = b.user1.Wins*100/(b.user1.Wins+b.user1.Losses)
-	b.user1.LossPercent = b.user1.Losses*100/(b.user1.Wins+b.user1.Losses)
-	b.user1.save()
-
 	return redirect('/Profile')
 
 def User1Wins(request, bet_id):
 	b = get_object_or_404(Bet, pk=bet_id)
-	winner = b.user1.pk
+	b.Winner = b.user1.pk
 	b.Status = 4
 	b.save()
-	b.user2.Losses += 1
-	b.user2.WinPercent = b.user2.Wins*100/(b.user2.Wins+b.user2.Losses)
-	b.user2.LossPercent = b.user2.Losses*100/(b.user2.Wins+b.user2.Losses)
-	b.user2.save()
-	b.user1.Wins += 1
-	b.user1.WinPercent = b.user1.Wins*100/(b.user1.Wins+b.user1.Losses)
-	b.user1.LossPercent = b.user1.Losses*100/(b.user1.Wins+b.user1.Losses)
-	b.user1.save()
+	return redirect('/Profile')
+
+def AcceptResult(request, bet_id):
+	b = get_object_or_404(Bet, pk=bet_id)
+	b.Status = 5
+	b.save()
+	if b.Winner == b.user1.pk:
+		b.user2.Losses += 1
+		b.user2.WinPercent = b.user2.Wins*100/(b.user2.Wins+b.user2.Losses)
+		b.user2.LossPercent = b.user2.Losses*100/(b.user2.Wins+b.user2.Losses)
+		b.user2.save()
+		b.user1.Wins += 1
+		b.user1.WinPercent = b.user1.Wins*100/(b.user1.Wins+b.user1.Losses)
+		b.user1.LossPercent = b.user1.Losses*100/(b.user1.Wins+b.user1.Losses)
+		b.user1.save()
+	elif b.Winner == b.user2.pk:
+		b.user2.Wins += 1
+		b.user2.WinPercent = b.user2.Wins*100/(b.user2.Wins+b.user2.Losses)
+		b.user2.LossPercent = b.user2.Losses*100/(b.user2.Wins+b.user2.Losses)
+		b.user2.save()
+		b.user1.Losses += 1
+		b.user1.WinPercent = b.user1.Wins*100/(b.user1.Wins+b.user1.Losses)
+		b.user1.LossPercent = b.user1.Losses*100/(b.user1.Wins+b.user1.Losses)
+		b.user1.save()
+
 	return redirect('/Profile')

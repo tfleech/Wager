@@ -77,6 +77,12 @@
                   <p>Loser {{ bet.Stakes }}</p>
                   <p align="right">{{ bet.Due_date }}</p>
                 </a>
+              {% elif bet.Status == 4 %}
+                <a href="#", class="list-group-item">
+                  <p style="color:red">{{ bet.Terms }} -- Challenged By: {{ bet.user1.User_Name }}  </p><button class="btn btn-default" onclick="location.href='/AcceptResult/{{ bet.pk }}';">Accept</button>
+                  <p>Loser {{ bet.Stakes }}</p>
+                  <p align="right">{{ bet.Due_date }}</p>
+                </a>
               {% endif %}
             {% endfor %}
             <br>
@@ -99,6 +105,31 @@
                   </div>
                   <!--<a href="/User2Wins/{{ bet.pk }}">I Won  </a><a href="/User1Wins/{{ bet.pk }}">I Lost</a>-->
                 </a>
+              {% elif bet.Status == 4 %}
+                <a href="#", class="list-group-item">
+                  <p style="color:red">{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p>
+                  <p>Loser {{ bet.Stakes }}</p>
+                  <p align="right">{{ bet.Due_date }}</p>
+                </a>
+              {% endif %}
+            {% endfor %}
+            <br>
+            <h3>History</h3>
+            {% for bet in all_bets %}
+              {% if bet.Status == 5 %}
+                {% if bet.Winner == user.pk %}
+                  <a href="#", class="list-group-item">
+                    <p style="color:green">{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p>
+                    <p>Loser {{ bet.Stakes }}</p>
+                    <p align="right">{{ bet.Due_date }}</p>
+                  </a>
+                {% else %}
+                  <a href="#", class="list-group-item">
+                    <p style="color:red">{{ bet.Terms }} -- Against: {{  bet.user2.User_Name }}</p>
+                    <p>Loser {{ bet.Stakes }}</p>
+                    <p align="right">{{ bet.Due_date }}</p>
+                  </a>
+                {% endif %}
               {% endif %}
             {% endfor %}
           </div>

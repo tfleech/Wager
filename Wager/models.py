@@ -22,6 +22,7 @@ class Bet(models.Model):
 	Terms = models.CharField(max_length=200)
 	Stakes = models.CharField(max_length=300)
 	Due_date = models.DateTimeField(default=timezone.now()+datetime.timedelta(days=1))
+	Winner = models.IntegerField(default=0)
 	#Status:
 	#1 = Made but not accepted
 	#2 = Accepted, waiting for time passed
