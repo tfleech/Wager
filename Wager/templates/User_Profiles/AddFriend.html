@@ -1,0 +1,12 @@
+<form action="/AddFriend/" method="post">
+	{% csrf_token %}
+
+	<label for="Friend">Choose a Friend</label>
+	<select id="Friend" name="Friend">
+	{% for entry in users %}
+		<option value="{{ entry.User_Name }}">{{ entry.User_Name }}</option>
+	{% endfor %}
+	</select>
+
+	<input type="submit" value="submit" />
+</form>

@@ -2,7 +2,7 @@
 
 {% block login %}
 <li><a href="$$$">About</a></li>
-<li><a href="$$$">Sign Up</a></li>
+<li><a href="/SignUp/">Sign Up</a></li>
 <li><a href="/LogIn/">Login</a></li>
 {% endblock %}
 
@@ -13,6 +13,7 @@
 
 	<div class="starter-template">
 	  <div class="list-group">
+	  	{% if latest_bet_list %}
 		    {% for bet in latest_bet_list %}
 		        <a href="#", class="list-group-item">
 		          <p>{{ bet.Terms }} -- Made BY: {{ bet.user1.User_Name }} Against: {{  bet.user2.User_Name }}</p>
@@ -20,6 +21,7 @@
 		          <p align="right">{{ bet.Due_date }}</p>
 		        </a>
 		    {% endfor %}
+	    {% endif %}
 	  </div>
 	</div>
 

@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from .models import Bet, User, Relationship
 from django.utils import timezone
 from django.db.models import Q
+from django.contrib import messages
 import datetime
 
 def HomePage(request):
@@ -20,6 +21,17 @@ def HomePage(request):
 def LogIn(request):
 	return render(request, 'User_Profiles/LogIn.html')
 
+def SignUp(request):
+	return render(request, 'User_Profiles/SignUp.html')
+
+def AddUser(request):
+	if request.POST:
+		U = User(User_Name=request.POST['UserName'], Password=request.POST['Password'], Date_joined=timezone.now())
+		U.save()
+		messages.info(request)
+		return redirect('/LogIn')
+	return redirect('/')
+
 def SetLoggedIn(request):
 	if request.POST:
 		UserName = request.POST['UserName']
@@ -35,6 +47,25 @@ def SetLoggedIn(request):
 			return HttpResponse("Wrong Password")
 		#request.session['username']=request.POST['your-name']
 		#return redirect('/')
+	return redirect('/')
+
+def FindFriends(request):
+	u = request.session['user']
+	friends = [x.user2_id for x in Relationship.objects.filter(user1_id=u)] + [x.user1_id for x in Relationship.objects.filter(user2_id=u)]
+	users = User.objects.all().exclude(pk__in=friends)
+	context = {'users':users}
+	return render(request, 'User_Profiles/AddFriend.html', context)
+
+def AddFriend(request):
+	if request.POST:
+		User1 = User.objects.get(pk=request.session['user'])
+		try:
+			User2 = User.objects.get(User_Name=request.POST['Friend'])
+		except User.DoesNotExist:
+			return HttpResponse("Friend does not exist")
+		R = Relationship(user1_id=User1.pk, user2_id=User2.pk, status=0, action_user_id=0)
+		R.save()
+		return redirect('/')
 	return redirect('/')
 
 def SetLoggedOut(request):
